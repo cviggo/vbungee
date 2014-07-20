@@ -1,0 +1,4 @@
+name: VBungee.Server
+main: org.cviggo.vbungee.server.Plugin
+version: 1.6.4
+author: cviggo
