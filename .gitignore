@@ -10,3 +10,12 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+/src/BungeeSuite/target
+/src/vbungee.admin/target
+/src/vbungee.client/target
+/src/vbungee.server/target
+/src/vbungee.shared/target
+/src/BungeeSuite/.idea/workspace.xml
+/src/vbungee.admin/.idea/workspace.xml
+/src/vbungee.client/.idea/workspace.xml
+/src/vbungee.server/.idea/workspace.xml
