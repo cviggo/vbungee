@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.cviggo.vbungee.client.Plugin;
+import org.cviggo.vbungee.shared.client.Client;
 import org.cviggo.vbungee.shared.server.ICommandHandler;
 import org.simpleframework.http.Query;
 import org.simpleframework.http.Request;
@@ -13,6 +14,7 @@ import org.simpleframework.http.Status;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 /**
@@ -62,6 +64,17 @@ public class SyncPlayerDataCommand implements ICommandHandler {
                                     body.println("ERROR");
                                     response.setStatus(Status.getStatus(501));
                                 }
+
+                                if (query.containsKey("callback")){
+
+                                    final HashMap<String, String> requestMap = new HashMap<>();
+                                    requestMap.put("playerName", query.get("callbackParameters"));
+
+                                    if(!Client.request("localhost:7000", "changeme", query.get("callback"), requestMap)){
+                                        plugin.logger.logWarn("failed to perform callback request: " + query.get("callback"));
+                                    }
+                                }
+
 
                                 // release latch
                                 latch.countDown();

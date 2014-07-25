@@ -2,12 +2,14 @@ package org.cviggo.managers;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.config.ServerInfo;
+import org.cviggo.bungeesuiteextensions.ServerManager;
 import org.cviggo.main.BungeeSuite;
 import org.cviggo.objects.BSPlayer;
 import org.cviggo.objects.Location;
 import org.cviggo.objects.Messages;
 import org.cviggo.objects.Warp;
 import org.cviggo.tasks.SendPluginMessage;
+import org.cviggo.vbungee.shared.client.Client;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -118,8 +120,36 @@ public class WarpsManager {
         }
     }
 
-
     public static void sendPlayerToWarp( String sender, String player, String warp, boolean permission, boolean bypass ) {
+
+        BSPlayer s = PlayerManager.getPlayer( sender );
+        BSPlayer p = PlayerManager.getSimilarPlayer( player );
+        if ( p == null ) {
+            s.sendMessage( Messages.PLAYER_NOT_ONLINE );
+            return;
+        }
+
+        final org.cviggo.bungeesuiteextensions.ServerInfo serverInfo = ServerManager.getServer(p.getServer().getInfo().getName());
+
+        final HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("playerName", player);
+
+        final HashMap<String, String> callbackMap = new HashMap<>();
+        callbackMap.put("sender", sender);
+        callbackMap.put("player", player);
+        callbackMap.put("warp", warp);
+        callbackMap.put("permission", Boolean.toString(permission));
+        callbackMap.put("bypass", Boolean.toString(bypass));
+
+        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+            @Override
+            public void run() {
+                Client.request(serverInfo, "SyncPlayerData", requestMap, "sendPlayerToWarp", callbackMap);
+            }
+        });
+    }
+
+    public static void sendPlayerToWarpInternal( String sender, String player, String warp, boolean permission, boolean bypass ) {
         BSPlayer s = PlayerManager.getPlayer( sender );
         BSPlayer p = PlayerManager.getSimilarPlayer( player );
         if ( p == null ) {

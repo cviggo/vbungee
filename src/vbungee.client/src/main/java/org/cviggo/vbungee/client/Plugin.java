@@ -1,6 +1,5 @@
 package org.cviggo.vbungee.client;
 
-import org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -9,9 +8,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.cviggo.vbungee.client.commands.SyncPlayerDataCommand;
 import org.cviggo.vbungee.shared.Logger;
 import org.cviggo.vbungee.shared.server.Engine;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.io.File;
 
 public class Plugin extends JavaPlugin implements Listener, PluginMessageListener {
 

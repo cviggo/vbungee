@@ -4,11 +4,15 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.plugin.Plugin;
+import org.cviggo.bungeesuiteextensions.Commands.SendPlayerToWarpCommand;
+import org.cviggo.bungeesuiteextensions.ServerManager;
 import org.cviggo.commands.BSVersionCommand;
 import org.cviggo.commands.MOTDCommand;
 import org.cviggo.commands.ReloadCommand;
 import org.cviggo.listeners.*;
 import org.cviggo.managers.*;
+import org.cviggo.vbungee.shared.Logger;
+import org.cviggo.vbungee.shared.server.Engine;
 
 import java.io.Console;
 import java.sql.SQLException;
@@ -16,6 +20,9 @@ import java.sql.SQLException;
 public class BungeeSuite extends Plugin {
     public static BungeeSuite instance;
     public static ProxyServer proxy;
+
+    Engine engine;
+    private Logger logger;
 
     public void onEnable() {
         instance = this;
@@ -26,6 +33,15 @@ public class BungeeSuite extends Plugin {
         registerListeners();
         registerCommands();
         reloadServersPlugins();
+
+        logger = new Logger(getLogger(), getDataFolder().getPath());
+        engine = new Engine(logger, 7000, "changeme", 5000);
+
+        engine.registerCommandHandler("sendPlayerToWarp", new SendPlayerToWarpCommand());
+
+        ServerManager.registerServer("hub", new org.cviggo.bungeesuiteextensions.ServerInfo("localhost", 7001, "changeme"));
+        ServerManager.registerServer("a", new org.cviggo.bungeesuiteextensions.ServerInfo("localhost", 7002, "changeme"));
+        ServerManager.registerServer("b", new org.cviggo.bungeesuiteextensions.ServerInfo("localhost", 7003, "changeme"));
     }
 
     private void registerCommands() {

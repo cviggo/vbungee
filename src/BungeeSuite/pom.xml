@@ -53,32 +53,6 @@
             <version>4.3.4</version>
         </dependency>
     </dependencies>
-    <!--<build>-->
-    <!--<finalName>${project.name}</finalName>-->
-    <!--<resources>-->
-    <!--<resource>-->
-    <!--<directory>${project.basedir}/src/main/resources</directory>-->
-    <!--<includes>-->
-    <!--<include>**</include>-->
-    <!--</includes>-->
-    <!--<filtering>true</filtering>-->
-    <!--</resource>-->
-    <!--</resources>-->
-    <!--<plugins>-->
-    <!--<plugin>-->
-    <!--<groupId>org.apache.maven.plugins</groupId>-->
-    <!--<artifactId>maven-compiler-plugin</artifactId>-->
-    <!--<version>3.1</version>-->
-    <!--<configuration>-->
-    <!--<source>1.7</source>-->
-    <!--<target>1.7</target>-->
-    <!--<showWarnings>true</showWarnings>-->
-    <!--<showDeprecation>true</showDeprecation>-->
-    <!--</configuration>-->
-    <!--</plugin>-->
-
-    <!--</plugins>-->
-    <!--</build>-->
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
         <resources>
@@ -130,6 +104,25 @@
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>../vbungee.shared/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

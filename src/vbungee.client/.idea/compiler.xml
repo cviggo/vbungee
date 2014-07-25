@@ -25,6 +25,9 @@
         <module name="vbungee.client" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="vbungee.client" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 
