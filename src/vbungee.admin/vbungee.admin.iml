@@ -11,8 +11,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.6.4-R2.0" level="project" />
     <orderEntry type="library" name="Votifier" level="project" />
+    <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.6.4-R2.0" level="project" />
   </component>
 </module>
 

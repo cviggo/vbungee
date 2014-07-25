@@ -1,0 +1,3 @@
+name: vbungee.admin
+main: org.cviggo.vbungee.Plugin
+version: 1.6.4-SNAPSHOT

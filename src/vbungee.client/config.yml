@@ -1,0 +1,3 @@
+serverPort: 8081
+apiKey: changeme
+commandTimeout: 5000
