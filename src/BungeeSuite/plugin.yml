@@ -1,0 +1,4 @@
+name: BungeeSuite
+main : main.BungeeSuite
+version: 3.0
+author: luke199
