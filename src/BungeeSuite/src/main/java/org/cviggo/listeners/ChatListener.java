@@ -9,13 +9,18 @@ import net.md_5.bungee.api.event.ServerKickEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
+import org.cviggo.bungeesuiteextensions.ServerManager;
+import org.cviggo.main.BungeeSuite;
 import org.cviggo.managers.ChatManager;
 import org.cviggo.managers.PlayerManager;
 import org.cviggo.objects.BSPlayer;
 import org.cviggo.objects.Messages;
+import org.cviggo.vbungee.shared.client.Client;
+import org.cviggo.vbungee.shared.server.ServerInfo;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class ChatListener implements Listener {
@@ -38,6 +43,7 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void playerChat( ChatEvent e ) throws SQLException {
+
         BSPlayer p = PlayerManager.getPlayer(e.getSender().toString());
         if ( p == null ) {
             if ( e.getSender() instanceof ProxiedPlayer ) {

@@ -1,6 +1,9 @@
 package org.cviggo.bungeesuiteextensions;
 
+import org.cviggo.vbungee.shared.server.ServerInfo;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +18,15 @@ public class ServerManager {
     }
 
     public static ServerInfo getServer(String name) {
-        return servers.get(name);
+
+        if (servers.containsKey(name)){
+            return servers.get(name);
+        }
+
+        return null;
+    }
+
+    public static java.util.Collection<ServerInfo> getServers(){
+        return servers.values();
     }
 }

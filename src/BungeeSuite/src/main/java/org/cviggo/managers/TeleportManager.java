@@ -2,12 +2,14 @@ package org.cviggo.managers;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import org.cviggo.bungeesuiteextensions.ServerManager;
 import org.cviggo.configs.TeleportConfig;
 import org.cviggo.main.BungeeSuite;
 import org.cviggo.objects.BSPlayer;
 import org.cviggo.objects.Location;
 import org.cviggo.objects.Messages;
 import org.cviggo.tasks.SendPluginMessage;
+import org.cviggo.vbungee.shared.client.Client;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -172,6 +174,32 @@ public class TeleportManager {
     }
 
     public static void sendPlayerToLastBack( BSPlayer player, boolean death, boolean teleport ) {
+        final String playerName = player.getName();
+//        final String serverName = player.getServer().getInfo().getName();
+//
+//        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(serverName);
+//
+//        final HashMap<String, String> requestMap = new HashMap<>();
+//        requestMap.put("playerName", playerName);
+//
+//        final HashMap<String, String> callbackMap = new HashMap<>();
+//        callbackMap.put("player", player.getName());
+//        callbackMap.put("death", Boolean.toString(death));
+//        callbackMap.put("teleport", Boolean.toString(teleport));
+//
+//        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+//            @Override
+//            public void run() {
+//                Client.request(serverInfo, "SyncPlayerData", requestMap, "sendPlayerToLastBack", callbackMap);
+//            }
+//        });
+        sendPlayerToLastBackInternal(playerName, death, teleport);
+    }
+
+    public static void sendPlayerToLastBackInternal( String playerStr, boolean death, boolean teleport ) {
+
+        final BSPlayer player = PlayerManager.getPlayer(playerStr);
+
         if ( player.hasDeathBackLocation() || player.hasTeleportBackLocation() ) {
             player.sendMessage( Messages.SENT_BACK );
         } else {
@@ -182,9 +210,9 @@ public class TeleportManager {
                 teleportPlayerToLocation( player, player.getLastBackLocation() );
             }
         } else if ( death ) {
-            teleportPlayerToLocation( player, player.getDeathBackLocation() );
+            teleportPlayerToLocation(player, player.getDeathBackLocation());
         } else if ( teleport ) {
-            teleportPlayerToLocation( player, player.getDeathBackLocation() );
+            teleportPlayerToLocation(player, player.getDeathBackLocation());
         }
     }
 
@@ -199,6 +227,32 @@ public class TeleportManager {
     }
 
     public static void teleportPlayerToPlayer( BSPlayer p, BSPlayer t ) {
+
+        final String playerName = p.getName();
+        final String serverName = p.getServer().getInfo().getName();
+
+        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(serverName);
+
+        final HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("playerName", playerName);
+
+        final HashMap<String, String> callbackMap = new HashMap<>();
+        callbackMap.put("p", p.getName());
+        callbackMap.put("t", t.getName());
+
+        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+            @Override
+            public void run() {
+                Client.request(serverInfo, "SyncPlayerData", requestMap, "teleportPlayerToPlayer", callbackMap);
+            }
+        });
+    }
+
+    public static void teleportPlayerToPlayerInternal( String pStr, String tStr ) {
+
+        final BSPlayer p = PlayerManager.getPlayer(pStr);
+        final BSPlayer t = PlayerManager.getPlayer(tStr);
+
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream( b );
         try {
@@ -230,6 +284,40 @@ public class TeleportManager {
     }
 
     public static void teleportPlayerToLocation( BSPlayer p, Location t ) {
+        final String playerName = p.getName();
+        final String serverName = p.getServer().getInfo().getName();
+
+        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(serverName);
+
+        final HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("playerName", playerName);
+
+        final HashMap<String, String> callbackMap = new HashMap<>();
+        callbackMap.put("p", p.getName());
+        callbackMap.put("server", t.getServer().getName());
+        callbackMap.put("world", t.getWorld());
+        callbackMap.put("x", Double.toString(t.getX()));
+        callbackMap.put("y", Double.toString(t.getY()));
+        callbackMap.put("z", Double.toString(t.getZ()));
+        callbackMap.put("yaw", Float.toString(t.getYaw()));
+        callbackMap.put("pitch", Float.toString(t.getPitch()));
+
+
+        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+            @Override
+            public void run() {
+                Client.request(serverInfo, "SyncPlayerData", requestMap, "teleportPlayerToLocation", callbackMap);
+            }
+        });
+    }
+
+    public static void teleportPlayerToLocationInternal( String pStr, String server, String world, double x, double y, double z, float yaw, float pitch) {
+
+        BungeeSuite.instance.getLogger().info(String.format("teleportPlayerToLocationInternal. server: %s, world: %s, x: %f, y: %f, z: %f, yaw: %f, pitch: %f",
+                server, world, x, y, z, yaw, pitch));
+
+        final BSPlayer p = PlayerManager.getPlayer(pStr);
+        final Location t = new Location(server, world, x, y, z, yaw, pitch);
 
         ByteArrayOutputStream b = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream( b );
@@ -275,5 +363,6 @@ public class TeleportManager {
     }
 
 }
+
 
 

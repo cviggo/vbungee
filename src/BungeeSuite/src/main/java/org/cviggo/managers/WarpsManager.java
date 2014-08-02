@@ -129,7 +129,7 @@ public class WarpsManager {
             return;
         }
 
-        final org.cviggo.bungeesuiteextensions.ServerInfo serverInfo = ServerManager.getServer(p.getServer().getInfo().getName());
+        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(p.getServer().getInfo().getName());
 
         final HashMap<String, String> requestMap = new HashMap<>();
         requestMap.put("playerName", player);

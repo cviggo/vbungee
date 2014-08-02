@@ -5,6 +5,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import org.cviggo.configs.ChatConfig;
+import org.cviggo.main.BungeeSuite;
 import org.cviggo.managers.ChatManager;
 
 import java.sql.SQLException;
@@ -179,6 +180,10 @@ public class BSPlayer {
     }
 
     public void setTeleportBackLocation( Location loc ) {
+
+        BungeeSuite.instance.getLogger().info(String.format("Setting backLocation for player: %s. server: %s, world: %s, x: %f, y: %f, z: %f, yaw: %f, pitch: %f",
+                playername, loc.getServer().getName(), loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch()));
+
         teleportBackLocation = loc;
         lastBack = false;
     }

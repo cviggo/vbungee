@@ -3,6 +3,7 @@ package org.cviggo.configs;
 import org.cviggo.configlibrary.Config;
 
 import java.io.File;
+import java.util.List;
 
 public class MainConfig {
     public static String configpath = File.separator + "plugins" + File.separator + "BungeeSuite" + File.separator + "config.yml";
@@ -19,6 +20,9 @@ public class MainConfig {
     public static boolean newPlayerBroadcast = config.getBoolean( "NewPlayerBroadcast", true );
     public static boolean broadcastProxyConnectionMessages = config.getBoolean( "BroadcastProxyConnectionMessages", true );
     public static int playerDisconnectDelay = config.getInt( "PlayerDisconnectDelay", 10 );
+    public static int vBungeeEngineListenPort = config.getInt( "vBungee.vBungeeEngineListenPort", 7000 );
+    public static String vBungeeEngineApiKey = config.getString( "vBungee.vBungeeEngineApiKey", "changeme" );
+    public static List<String> vBungeeServers = config.getSubNodes("vBungee.servers");
 
     public static void reloadConfig() {
         config = null;

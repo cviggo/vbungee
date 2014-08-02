@@ -21,7 +21,7 @@ public class SpawnListener implements Listener {
 
 				@Override
 				public void run() {
-					SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(e.getPlayer()), false);
+					SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(e.getPlayer()));
 				}
 				
 			}, 300, TimeUnit.MILLISECONDS);

@@ -7,6 +7,7 @@ import net.md_5.bungee.event.EventHandler;
 import org.cviggo.managers.LoggingManager;
 import org.cviggo.managers.PlayerManager;
 import org.cviggo.managers.TeleportManager;
+import org.cviggo.objects.BSPlayer;
 import org.cviggo.objects.Location;
 
 import java.io.ByteArrayInputStream;
@@ -44,8 +45,25 @@ public class TeleportsMessageListener implements Listener {
         }
 
         if ( task.equals( "PlayersTeleportBackLocation" ) ) {
-            TeleportManager.setPlayersTeleportBackLocation( PlayerManager.getPlayer( in.readUTF() ), new Location( ( ( Server ) event.getSender() ).getInfo(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble() ) );
+            org.cviggo.main.BungeeSuite.instance.getLogger().info("setPlayersTeleportBackLocation call from PlayersTeleportBackLocation! sender: " + ((Server) event.getSender()).getInfo().getName());
+
             return;
+
+//            final BSPlayer player = PlayerManager.getPlayer(in.readUTF());
+//
+//            try {
+//
+//                // HACK: only allow from current server
+//                if (player != null && player.getServer() != null && event.getSender() != null && !player.getServer().getInfo().getName().equals(((Server) event.getSender()).getInfo().getName())) {
+//                    org.cviggo.main.BungeeSuite.instance.getLogger().info("setPlayersTeleportBackLocation ignored");
+//                    return;
+//                }
+//            }catch (Throwable t){
+//
+//            }
+//
+//            TeleportManager.setPlayersTeleportBackLocation(player, new Location( ( ( Server ) event.getSender() ).getInfo(), in.readUTF(), in.readDouble(), in.readDouble(), in.readDouble() ) );
+//            return;
         }
 
         if ( task.equals( "PlayersDeathBackLocation" ) ) {

@@ -1,0 +1,9 @@
+name: vbungee.client
+main: org.cviggo.vbungee.client.Plugin
+version: 1.6.4-SNAPSHOT
+commands:
+  vb:
+    description: Commands for VBungee
+    usage: /vb cmd <bungee|all|server> <command to run>
+    permission: vbungee.client.admin
+    permission-message: You don't have permission to use this command.

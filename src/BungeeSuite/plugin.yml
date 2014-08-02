@@ -1,4 +1,4 @@
 name: vBungeeSuite
 main : org.cviggo.main.BungeeSuite
 version: 1.6.4
-author: luke199 (extended by cviggo)
+author: cviggo (based on the original BungeeSuite by luke199)

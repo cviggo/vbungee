@@ -10,9 +10,11 @@ import java.util.HashMap;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.config.ServerInfo;
+import org.cviggo.bungeesuiteextensions.ServerManager;
 import org.cviggo.main.BungeeSuite;
 import org.cviggo.objects.*;
 import org.cviggo.tasks.SendPluginMessage;
+import org.cviggo.vbungee.shared.client.Client;
 
 public class PortalManager {
     static HashMap<ServerInfo, ArrayList<Portal>> portals = new HashMap<>();
@@ -183,6 +185,39 @@ public class PortalManager {
             p.sendMessage( Messages.PORTAL_NO_PERMISSION );
             return;
         }
+
+        final String playerName = p.getName();
+        final String serverName = p.getServer().getInfo().getName();
+
+        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(serverName);
+
+        final HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("playerName", playerName);
+
+        final HashMap<String, String> callbackMap = new HashMap<>();
+        callbackMap.put("p", p.getName());
+        callbackMap.put("type", type);
+        callbackMap.put("dest", dest);
+        callbackMap.put("perm", Boolean.toString(perm));
+
+
+        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+            @Override
+            public void run() {
+                Client.request(serverInfo, "SyncPlayerData", requestMap, "teleportPlayer", callbackMap);
+            }
+        });
+    }
+
+    public static void teleportPlayerInternal( String pStr, String type, String dest, boolean perm ) {
+
+        final BSPlayer p = PlayerManager.getPlayer(pStr);
+
+        if ( !perm ) {
+            p.sendMessage( Messages.PORTAL_NO_PERMISSION );
+            return;
+        }
+
         if ( type.equalsIgnoreCase( "warp" ) ) {
             Warp w = WarpsManager.getWarp( dest );
             if ( w == null ) {
@@ -218,7 +253,6 @@ public class PortalManager {
                 p.connectTo( s );
             }
         }
-
     }
 
     public static void listPortals( BSPlayer p ) {

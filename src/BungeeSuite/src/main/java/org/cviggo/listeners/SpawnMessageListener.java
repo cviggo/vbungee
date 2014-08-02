@@ -34,7 +34,7 @@ public class SpawnMessageListener implements Listener {
         Server s = ( Server ) event.getSender();
 
         if ( task.equals( "SendToProxySpawn" ) ) {
-            SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(in.readUTF()), in.readBoolean());
+            SpawnManager.sendPlayerToProxySpawn(PlayerManager.getPlayer(in.readUTF()));
         } else if ( task.equals( "GetSpawns" ) ) {
             SpawnManager.sendSpawns( s );
         } else if ( task.equals( "SetServerSpawn" ) ) {

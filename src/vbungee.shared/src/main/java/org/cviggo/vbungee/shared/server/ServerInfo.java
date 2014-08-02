@@ -1,4 +1,4 @@
-package org.cviggo.bungeesuiteextensions;
+package org.cviggo.vbungee.shared.server;
 
 /**
  * Created by viggo on 25-07-2014.

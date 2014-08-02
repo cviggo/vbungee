@@ -1,13 +1,24 @@
 package org.cviggo.vbungee.client;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.cviggo.vbungee.client.commands.ConsoleCommand;
 import org.cviggo.vbungee.client.commands.SyncPlayerDataCommand;
 import org.cviggo.vbungee.shared.Logger;
+import org.cviggo.vbungee.shared.Utils;
+import org.cviggo.vbungee.shared.client.Client;
 import org.cviggo.vbungee.shared.server.Engine;
+import org.cviggo.vbungee.shared.server.ServerInfo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class Plugin extends JavaPlugin implements Listener, PluginMessageListener {
 
@@ -16,6 +27,7 @@ public class Plugin extends JavaPlugin implements Listener, PluginMessageListene
     public Logger logger;
     private Engine engine;
     private int commandTimeout;
+    private ServerInfo bungeeServerInfo;
 
     @Override
     public void onEnable() {
@@ -28,6 +40,7 @@ public class Plugin extends JavaPlugin implements Listener, PluginMessageListene
         logger = new Logger(getLogger(), getDataFolder().toString());
         engine = new Engine(logger, getServerPort(), getApiKey(), commandTimeout);
         engine.registerCommandHandler("SyncPlayerData", new SyncPlayerDataCommand(this, getServer().getScheduler()));
+        engine.registerCommandHandler("ConsoleCommand", new ConsoleCommand(this, getServer().getScheduler()));
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(this, this);
@@ -63,6 +76,39 @@ public class Plugin extends JavaPlugin implements Listener, PluginMessageListene
         serverPort = getConfig().getInt("serverPort");
         apiKey = getConfig().getString("apiKey");
         commandTimeout = getConfig().getInt("commandTimeout");
+        bungeeServerInfo = new ServerInfo(
+            getConfig().getString("bungeeHost"),
+            getConfig().getInt("bungeePort"),
+            getConfig().getString("bungeeApiKey")
+        );
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("vb")) {
+
+            if (args != null && args.length > 0){
+
+                final ArrayList<String> strings = new ArrayList<>(Arrays.asList(args));
+                final String command = strings.remove(0);
+
+                if ("cmd".equals(command)){
+                    if (strings.size() >= 2){
+                        final String scope = strings.remove(0);
+                        final String commandToRequest = Utils.join(strings, " ");
+                        final HashMap<String, String> map = new HashMap<>();
+                        map.put("scope", scope);
+                        map.put("commandToRequest", commandToRequest);
+
+                        Client.request(getBungeeServerInfo(), "ConsoleCommandRequest", map);
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -85,5 +131,9 @@ public class Plugin extends JavaPlugin implements Listener, PluginMessageListene
 
     public int getServerPort() {
         return serverPort;
+    }
+
+    public ServerInfo getBungeeServerInfo() {
+        return bungeeServerInfo;
     }
 }

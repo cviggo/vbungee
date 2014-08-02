@@ -6,16 +6,19 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
+import org.cviggo.bungeesuiteextensions.ServerManager;
 import org.cviggo.configs.SpawnConfig;
 import org.cviggo.main.BungeeSuite;
 import org.cviggo.objects.BSPlayer;
 import org.cviggo.objects.Location;
 import org.cviggo.objects.Messages;
 import org.cviggo.tasks.SendPluginMessage;
+import org.cviggo.vbungee.shared.client.Client;
 
 
 public class SpawnManager {
@@ -47,8 +50,31 @@ public class SpawnManager {
 		return NewPlayerSpawn!=null;
 	}
 
-	public static void sendPlayerToProxySpawn(BSPlayer player, boolean silent) {
-		if(!doesProxySpawnExist()){
+    public static void sendPlayerToProxySpawn(BSPlayer player) {
+        final org.cviggo.vbungee.shared.server.ServerInfo serverInfo = ServerManager.getServer(player.getServer().getInfo().getName());
+
+        final HashMap<String, String> requestMap = new HashMap<>();
+        requestMap.put("playerName", player.getName());
+
+        final HashMap<String, String> callbackMap = new HashMap<>();
+        callbackMap.put("playerName", player.getName());
+
+        BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+            @Override
+            public void run() {
+                Client.request(serverInfo, "SyncPlayerData", requestMap, "sendPlayerToProxySpawn", callbackMap);
+            }
+        });
+    }
+
+    public static void sendPlayerToProxySpawnInternal(String playerName) {
+
+        BSPlayer player = PlayerManager.getSimilarPlayer( playerName );
+        if ( player == null ) {
+            return;
+        }
+
+        if(!doesProxySpawnExist()){
 			player.sendMessage(Messages.SPAWN_DOES_NOT_EXIST);
 			return;
 		}
@@ -124,8 +150,9 @@ public class SpawnManager {
 		}
 		
 	}
-	
+
 	public static void sendSpawn(String name, Location l){
+
 		 ByteArrayOutputStream b = new ByteArrayOutputStream();
 	        DataOutputStream out = new DataOutputStream( b );
 	        try {

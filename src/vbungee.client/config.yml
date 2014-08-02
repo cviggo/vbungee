@@ -1,3 +1,6 @@
-serverPort: 8081
+serverPort: 7001
 apiKey: changeme
 commandTimeout: 5000
+bungeeHost: localhost
+bungeePort: 7000
+bungeeApiKey: changeme

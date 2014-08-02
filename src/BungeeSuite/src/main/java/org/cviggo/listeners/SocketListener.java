@@ -2,6 +2,7 @@ package org.cviggo.listeners;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import org.cviggo.main.BungeeSuite;
 import org.cviggo.managers.PlayerManager;
 import org.cviggo.managers.TeleportManager;
 import org.cviggo.objects.Location;
@@ -39,6 +40,7 @@ public class SocketListener extends Thread {
             String task = data.readUTF();
 
             if ( task.equals( "PlayersTeleportBackLocation" ) ) {
+                BungeeSuite.instance.getLogger().warning("setPlayersTeleportBackLocation call from socket listener!");
                 TeleportManager.setPlayersTeleportBackLocation(PlayerManager.getPlayer(data.readUTF()), new Location(getServer(new InetSocketAddress(socket.getInetAddress(), port)), data.readUTF(), data.readDouble(), data.readDouble(), data.readDouble()));
             }
 
