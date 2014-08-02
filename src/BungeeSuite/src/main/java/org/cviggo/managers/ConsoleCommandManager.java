@@ -20,8 +20,15 @@ public class ConsoleCommandManager {
         map.put("cmd", command);
 
         if ("all".equals(scope)){
-            for (ServerInfo server : servers) {
-                Client.request(server, "ConsoleCommand", map);
+            for (final ServerInfo server : servers) {
+
+                BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+                    @Override
+                    public void run() {
+                        Client.request(server, "ConsoleCommand", map);
+                    }
+                });
+
             }
             return true;
         }
@@ -33,7 +40,12 @@ public class ConsoleCommandManager {
         final ServerInfo server = ServerManager.getServer(scope);
 
         if (server != null){
-            Client.request(server, "ConsoleCommand", map);
+            BungeeSuite.instance.getProxy().getScheduler().runAsync(BungeeSuite.instance, new Runnable() {
+                @Override
+                public void run() {
+                    Client.request(server, "ConsoleCommand", map);
+                }
+            });
             return true;
         }
 

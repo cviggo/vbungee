@@ -100,7 +100,12 @@ public class Plugin extends JavaPlugin implements Listener, PluginMessageListene
                         map.put("scope", scope);
                         map.put("commandToRequest", commandToRequest);
 
-                        Client.request(getBungeeServerInfo(), "ConsoleCommandRequest", map);
+                        getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+                            @Override
+                            public void run() {
+                                Client.request(getBungeeServerInfo(), "ConsoleCommandRequest", map);
+                            }
+                        });
                     }
                 }
 
