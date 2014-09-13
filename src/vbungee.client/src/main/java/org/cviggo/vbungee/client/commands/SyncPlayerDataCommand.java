@@ -111,7 +111,7 @@ public class SyncPlayerDataCommand implements ICommandHandler {
         if (file != null && file.exists()) {
             plugin.logger.logInfo("player data found. Total size: " + file.length() + " bytes");
 
-            final String[] serverFolderNames = {"tppi-gliese", "tppi-helios", "tppi-sectorz", "tppi-sigmus", "tppi-resource", "tppi-hub"};
+            final String[] serverFolderNames = {"tppi-gliese", "tppi-helios", "tppi-sectorz", "tppi-sigmus", "tppi-resource", "tppi-hub", "tppi-midgard"};
 
             try {
 
